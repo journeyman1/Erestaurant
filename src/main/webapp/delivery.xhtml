@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+xmlns:h="http://java.sun.com/jsf/html"
+xmlns:ui="http://java.sun.com/jsf/facelets"
+xmlns:f="http://java.sun.com/jsf/core"
+xmlns:o="http://openfaces.org/"
+>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Welcome</title>
+</head>
+<body>
+<ui:composition template="WEB-INF/templates/staff.xhtml">
+<ui:define name="content">
+	<h:form id="form" rendered="#{userBean.showDelivery}">
+		<h:selectManyCheckbox value="#{deliveryBean.filter}">
+			<f:selectItems value="#{deliveryBean.statuses}"/>
+		</h:selectManyCheckbox>
+		<o:commandButton value="Apply filter" action="#{deliveryBean.applyFilter}"/>
+			
+		<o:dataTable value="#{deliveryBean.filteredList}" var="order" width="100%">
+  			<o:columnResizing resizeHandleWidth="10px" minColWidth="50px" />
+			<o:column width="50px">
+				<f:facet name="header">Id</f:facet>
+    			#{order.id}
+    		</o:column>
+					
+			<o:columnGroup>
+			<f:facet name="header">Contents</f:facet>
+			<o:column>
+			<f:facet name="header">Kitchen-made</f:facet>
+			
+				<o:forEach items="#{deliveryBean.returnKitchenMadeDishes(order)}" var="content">
+					<h:graphicImage rendered="#{content.state!=0}" value="./images/tick_2.ico" width="16" height="16"/>
+					#{deliveryBean.dishService.find(content.getDishId()).getDishName()}<br/>
+				</o:forEach>
+			
+			</o:column>
+			<o:column>
+			<f:facet name="header">Non-kitchen-made</f:facet>
+				<o:forEach items="#{deliveryBean.returnNonKitchenMadeDishes(order)}" var="content">
+					<h:graphicImage rendered="#{order.status>1}" value="./images/tick_2.ico" width="16" height="16"/>
+					#{deliveryBean.dishService.find(content.getDishId()).getDishName()}<br/>
+				</o:forEach>			
+			</o:column>			
+			</o:columnGroup>
+								
+			<o:column width="100px" sortingExpression="#{order.orderTime}">
+				<f:facet name="header">Order Time</f:facet> 
+        		<h:outputText value="#{order.orderTime}"> 
+        			<f:convertDateTime pattern="hh:mm dd.MM.yyyy" timeZone="EET"/>
+        		</h:outputText>
+     		</o:column>			
+     		
+     		<o:column width="100px" sortingExpression="#{order.orderTime}">
+				<f:facet name="header">Order Time</f:facet> 
+        		<h:outputText value="#{order.statusTime}"> 
+        			<f:convertDateTime pattern="hh:mm dd.MM.yyyy" timeZone="EET"/>
+        		</h:outputText>
+     		</o:column>		     				
+     		
+     		<o:column width="150px" sortingExpression="#{order.status}">
+				<f:facet name="header">Status</f:facet>
+        		#{deliveryBean.statusesKey.get(order.status)}
+			</o:column>
+					
+			<o:column>
+				<f:facet name="header">Description</f:facet>
+				
+				<o:commandButton rendered="#{deliveryBean.showMarkButton(order)}" value="Mark order as #{deliveryBean.incStatus(order.status)}"
+					action="#{deliveryBean.setNextStatus}"> 
+					<f:setPropertyActionListener target="#{deliveryBean.currentOrder}"
+						value="#{order}" />
+						<f:ajax execute="@form" />
+				</o:commandButton>
+				#{userBean.customerService.findById(order.getCustomerId()).getAddress()}
+			</o:column>
+					
+		</o:dataTable>
+	</h:form>
+	
+			<h:form rendered="#{not userBean.showDelivery}">
+				<ui:include src="./forbidden.xhtml"/>
+			</h:form>
+</ui:define>
+</ui:composition>
+</body>
+</html>

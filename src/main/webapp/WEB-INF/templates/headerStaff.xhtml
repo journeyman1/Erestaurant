@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml" 
+xmlns:ui="http://java.sun.com/jsf/facelets"
+xmlns:h="http://java.sun.com/jsf/html"
+xmlns:f="http://java.sun.com/jsf/core"
+xmlns:o="http://openfaces.org/"
+xmlns:rich="http://richfaces.org/rich"
+xmlns:a4j="http://richfaces.org/a4j"
+> 
+<h:head>
+<link rel="stylesheet" type="text/css" href="styles.css" /> 
+</h:head>
+<h:body> 
+	<ui:composition> 
+		<h:form>
+		
+		<h:panelGroup columns="7" style="">
+		<o:commandLink styleClass="enjoy-css-buttonStaff" style="color:#c5a956;" value="Superuser" action ="superuser" rendered="#{userBean.showSuper}"/>
+		<o:commandLink styleClass="enjoy-css-buttonStaff" style="color:#c5a956;" value="Kitchen" action="kitchen" rendered="#{userBean.showKitchen}"/>
+		<o:commandLink styleClass="enjoy-css-buttonStaff" style="color:#c5a956;" value="Delivery" action="delivery" rendered="#{userBean.showDelivery}" />
+		<o:commandLink styleClass="enjoy-css-buttonStaff" style="color:#c5a956;" value="Edit Menu" action="admin" rendered="#{userBean.showAdmin}"/>
+		<o:commandLink styleClass="enjoy-css-buttonStaff" style="color:#c5a956;" value="Report" action="report" rendered="#{userBean.showAnalyst}"/>
+		<o:commandLink styleClass="enjoy-css-buttonStaff" style="color:#c5a956;" value="Main site" action="menu"/>
+		<o:commandLink styleClass="enjoy-css-buttonStaff" style="color:#c5a956;" value="Logout" action="#{userBean.logOut}" rendered="#{userBean.showStaffCabinet}"/>
+		</h:panelGroup>
+
+		</h:form>
+	</ui:composition> 
+</h:body> 
+</html>
+

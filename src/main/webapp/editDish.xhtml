@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:o="http://openfaces.org/">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Welcome</title>
+</head>
+<body>
+	<ui:composition template="WEB-INF/templates/staff.xhtml">
+		<ui:define name="content">
+			<h:form rendered="#{userBean.showAdmin}">
+	Enter data for new menu entry: <br />
+	<h:panelGrid columns="2" styleClass="inputForm">
+				<h:outputText value="Dish name: " />
+				<o:inputText required="true" value="#{menuBean.currentDish.dishName}" >
+					<o:validateCustom clientFunction="return value.length>0"
+							detail="Dish name cannot be empty" /> </o:inputText>
+				
+				<h:outputText value="Description: " />
+				<o:inputTextarea value="#{menuBean.currentDish.description}"/>					
+				
+				<h:outputText value="Price " />
+				<o:inputText value="#{menuBean.currentDish.price}">
+					<o:validateCustom clientFunction="return value>0"
+						detail="Price can only be greater than zero" />	
+				</o:inputText>
+				
+				<h:outputText value="Category " />
+				<h:selectOneMenu required="true" value="#{menuBean.selectedCategory}" title="Select a category from the list"> 
+					<f:selectItems value="#{menuBean.categoryList}" var="category" 
+							itemLabel="#{category.title}"
+							itemValue="#{category.title}"/>
+				</h:selectOneMenu>
+					
+				<h:outputText value="Item type: " />
+				
+				<h:selectOneRadio required="true" value="#{menuBean.currentDish.dishType}" layout="pageDirection">
+					<f:selectItem itemValue="#{menuBean.getKitchenMade()}" itemLabel="Kitchen made item"/>
+					<f:selectItem itemValue="#{menuBean.getNonKitchenMade()}" itemLabel="Consumption ready item"/>				 	
+				</h:selectOneRadio>
+				
+				
+	</h:panelGrid>
+	<o:commandButton value="Save item" action="#{menuBean.updateMenuItem}" />
+			</h:form>
+			
+			<h:form rendered="#{not userBean.showAdmin}">
+				<ui:include src="./forbidden.xhtml"/>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</body>
+</html>

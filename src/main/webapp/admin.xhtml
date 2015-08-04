@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:o="http://openfaces.org/" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Welcome</title>
+</h:head>
+<h:body>
+	<ui:composition template="WEB-INF/templates/staff.xhtml">
+		<ui:define name="content">
+			<h:form id="admin" rendered="#{userBean.showAdmin}" style="font-size: 16px !important;">
+
+				<rich:tabPanel style="font-size: 16px !important;" >
+					<a4j:repeat value="#{menuBean.categoryList}" var="category" keepSaved="true" style="font-size: 16px !important;">
+						<rich:tab header="#{category.title}" name="#{category.title}" style="font-size: 16px !important;">
+							<f:facet name="header">#{category.title}</f:facet>
+							<rich:dataTable style="font-size: 16px !important;"
+								value="#{menuBean.categoryMap.get(category.title).dishes}"
+								var="dish"
+								rowClasses="dataTableOddRow, dataTableEvenRow">
+								<rich:column style="font-size: 16px !important;">
+									<f:facet name="header">Dish</f:facet>
+        							#{dish.dishName}
+     							</rich:column>
+								
+								<rich:column style="font-size: 16px !important;">
+									<f:facet name="header">Description</f:facet>
+        							#{dish.description}
+     							</rich:column>
+								
+								<rich:column style="font-size: 16px !important;">
+									<f:facet name="header">Price</f:facet>
+        							#{dish.price}
+								</rich:column>
+								
+								<rich:column style="font-size: 16px !important;">
+									<f:facet name="header">Active on menu</f:facet>
+        							<h:outputText value="Active" rendered="#{dish.active>0}"/>
+        							<h:outputText value="Inactive" rendered="#{dish.active==0}"/>
+								</rich:column>
+								
+								<rich:column style="font-size: 16px !important;">
+									<f:facet name="header">Category</f:facet>
+        							#{dish.category.title}
+								</rich:column>
+								
+								<rich:column style="font-size: 16px !important;">
+									<f:facet name="header">Dish Type</f:facet>
+        							#{dish.dishType}
+								</rich:column>
+								
+								<rich:column style="font-size: 16px !important;">
+									<h:commandButton value="Edit record"
+										action="#{menuBean.editDish}" style="font-size: 16px !important;">
+										<f:setPropertyActionListener target="#{menuBean.currentDish}"
+											value="#{dish}" />
+									</h:commandButton>
+								</rich:column>
+
+								<rich:column style="font-size: 16px !important;">
+									<h:commandButton value="Delete record"
+										action="#{menuBean.removeDishFromMenu}" style="font-size: 16px !important;">
+										<f:setPropertyActionListener target="#{menuBean.currentDish}"
+											value="#{dish}" />
+									</h:commandButton>
+								</rich:column>
+							</rich:dataTable>
+
+						</rich:tab>
+					</a4j:repeat>
+				</rich:tabPanel>
+
+				<h:commandButton value="Add new record"
+					action="#{menuBean.addNewDish}" style="font-size: 16px !important;"/>
+					<h:commandButton value="Add new category" style="font-size: 16px !important;">
+						<rich:componentControl target="popup" operation="show" />
+					</h:commandButton>
+					 
+					 <rich:popupPanel id="popup" modal="true" resizeable="true" onmaskclick="#{rich:component('popup')}.hide()">
+					        <f:facet name="header">
+					            <h:outputText value="Simple popup panel" />
+					        </f:facet>
+					        <f:facet name="controls">
+					            <h:outputLink value="#" onclick="#{rich:component('popup')}.hide();">
+					                X
+					            </h:outputLink>
+					        </f:facet>
+							<h:outputText value="Enter the name of the new category:"/>
+							<h:inputText value="#{menuBean.newCategoryTitle}" />
+							<h:commandButton value="Create" action="#{menuBean.createCategory}" onclick="#{rich:component('popup')}.hide();" />
+							<h:commandButton value="Cancel" onclick="#{rich:component('popup')}.hide();" style="float: right;"/>
+					    </rich:popupPanel>
+					
+
+			</h:form>
+			
+			<h:form rendered="#{not userBean.showAdmin}">
+				<ui:include src="./forbidden.xhtml"/>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

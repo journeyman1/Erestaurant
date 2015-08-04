@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:o="http://openfaces.org/">
+<body>
+		<h:form  >
+			<h:panelGrid columns="2" style="margin-right: 5px; text-align: left;" rendered="#{userBean.showLoginForm}">
+				<h:outputText value="Login:" />
+				<h:inputText id="login" value="#{userBean.login}" promptText="E-mail address" > 
+					<o:validateCustom serverFunction="#{userBean.validateUser}"
+               			detail="No such user in the system"
+               			summary="Validation error"/>
+               			<o:floatingIconMessage for="login" style="border: 2px solid red;" showSummary="true"/>
+				</h:inputText> 
+					
+				
+				<h:outputText value="Password:" />
+				<h:inputSecret id="password" value="#{userBean.password}" promptText="Password"> 
+					<o:validateCustom serverFunction="#{userBean.validatePassword}"
+               			detail="Incorrect password"
+               			summary="validation error"/>
+               			<o:floatingIconMessage for="password" style="border: 2px solid red;" showSummary="true"/>
+				</h:inputSecret>
+								
+			<o:commandLink value="Register" action="register" style="float: left;"/>
+			<o:commandButton value="Login" action="#{userBean.logIn}" style="float: right;" render="@this"/>
+			</h:panelGrid>
+			
+
+						
+		
+		<h:panelGrid columns="2" style="margin-left: 0px; text-align: left;" rendered="#{userBean.showCustomer}" >
+			<o:commandLink value="Edit My Data" action="editCustomer"/>
+			<o:commandLink value="Logout" action="#{userBean.logOut}"/>
+		</h:panelGrid>
+		</h:form>
+		
+</body>
+</html>

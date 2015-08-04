@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:o="http://openfaces.org/" 
+	xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Welcome</title>
+</h:head>
+<h:body>
+	<ui:composition template="WEB-INF/templates/staff.xhtml">
+
+	<ui:define name="content">
+	
+		<h:form id="form" rendered="#{userBean.showKitchen}">
+			<o:dataTable value="#{kitchenBean.list}" var="item" width="100%" sortColumnId="orderTime" sortAscending="true">
+			
+				<o:columnResizing resizeHandleWidth="10px" minColWidth="50px"/>
+				<o:column>
+					<f:facet name="header">Dish name</f:facet>
+        #{kitchenBean.dishService.find(item.dishId).getDishName()}
+     </o:column>
+				
+				<o:column>				
+					<f:facet name="header">Dish category</f:facet>
+		#{kitchenBean.dishService.find(item.dishId).getCategory().getTitle()}
+     </o:column>
+				
+				<o:column id="orderTime">
+					<f:facet name="header">Order time</f:facet>
+        <h:outputText value="#{item.stateTime}">
+        	<f:convertDateTime pattern="hh:mm dd.MM.yyyy" timeZone="EET"/>
+        </h:outputText>
+	</o:column>
+				<o:column>
+					<o:commandButton value="Mark this dish as done"
+						action="#{kitchenBean.markAsDone}">
+						<f:setPropertyActionListener target="#{kitchenBean.oc}"
+							value="#{item}" />
+						<f:ajax execute="@form" />
+					</o:commandButton>
+				</o:column>
+			</o:dataTable>
+		</h:form>
+		
+					<h:form rendered="#{not userBean.showKitchen}">
+				<ui:include src="./forbidden.xhtml"/>
+			</h:form>
+	</ui:define>
+	</ui:composition>
+</h:body>
+</html>

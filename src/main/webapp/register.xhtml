@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:o="http://openfaces.org/"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+<h:head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Welcome</title>
+</h:head>
+<body>
+	<ui:composition template="WEB-INF/templates/common.xhtml">
+		<ui:define name="content">
+			<h:form>
+	Please fill in fields below: <br />
+	<h:panelGrid columns="3" styleClass="inputForm" style="text-align: right;">
+				<h:outputText value="Full name: " />
+				<h:inputText id="name" required="true" value="#{userBean.currentCustomer.name}" />
+				<rich:message for="name" ajaxRendered="true" />
+				
+				<h:outputText value="Email: " />
+				<h:inputText id="email" required="true" value="#{userBean.currentCustomer.email}">
+						<o:validateCustom serverFunction="#{userBean.validateUser}"
+							detail="User with such name already exists in the system"
+							summary="Validation error"/>						
+						<o:validateEmail summary="Incorrect email"
+						detail="Please provide correct email address" />
+				</h:inputText>
+				<rich:message for="email" ajaxRendered="true" />
+				
+				<h:outputText value="Password: " />
+				<h:inputSecret required="true" id="password1"
+					value="#{userBean.currentCustomer.password}">
+					<o:validateCustom clientFunction="return value.length>5;"
+						detail="Value should contain at least 6 symbols" />
+				</h:inputSecret>
+				<rich:message for="password1" ajaxRendered="true" />
+			
+				<h:outputText value="Repeat password: " />
+				<h:inputSecret required="true" id="password2" value="#{userBean.password}">
+					<o:validateEqual for="password1" />
+				</h:inputSecret>
+				<rich:message for="password2" ajaxRendered="true" />
+				
+				<h:outputText value="Address: " />
+				<h:inputText id="address" required="true" value="#{userBean.currentCustomer.address}">
+				</h:inputText>
+				<rich:message for="address" ajaxRendered="true" />
+							
+				<h:outputText value="Birth Day: " />
+				<h:inputText id="birthday" required="true" value="#{userBean.birthday}" promptText="e.g. 24.12.2000">
+					<f:convertDateTime pattern="dd.MM.yyyy" /> 
+				</h:inputText>
+				<rich:message for="birthday" ajaxRendered="true" />
+				</h:panelGrid>
+				<a4j:commandButton value="Register" action="#{userBean.register}"/>
+				
+				
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</body>
+</html>

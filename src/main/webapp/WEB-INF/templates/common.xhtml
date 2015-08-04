@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+	<title><ui:insert name="title">Welcome</ui:insert></title>
+	<link rel="stylesheet" type="text/css" href="styles.css" />
+</h:head>
+
+<h:body id="common">
+	<div id="header">
+		<ui:insert name="header">
+			<ui:include src="header.xhtml" />
+		</ui:insert>
+	</div>
+
+	<br />
+	<div id="content" style="min-height: 400px;">
+		<ui:insert name="content">
+			<ui:include src="content.xhtml" />
+		</ui:insert>
+
+	</div>
+
+	<br />
+	<div id="footer">
+		<ui:insert name="footer">
+			<ui:include src="footer.xhtml" />
+		</ui:insert>
+	</div>
+
+
+</h:body>
+</html>

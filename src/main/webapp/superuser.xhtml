@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:o="http://openfaces.org/" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Welcome</title>
+</h:head>
+<body>
+	<ui:composition template="WEB-INF/templates/staff.xhtml">
+		<ui:define name="content">
+			<h:form rendered="#{userBean.showSuper}">
+				<rich:dataTable value="#{userBean.staff}" var="user" width="100%"
+					rowClasses="dataTableOddRow, dataTableEvenRow" style="font-size: 16px !important;">
+					<rich:column style="font-size: 16px !important;">
+						<f:facet name="header">User name</f:facet>
+        #{user.name}
+     </rich:column>
+					<rich:column style="font-size: 16px !important;">
+						<f:facet name="header">User address</f:facet>
+        #{user.address}
+     </rich:column>
+					<rich:column style="font-size: 16px !important;">
+						<f:facet name="header">Email</f:facet>
+        #{user.email}
+	</rich:column>
+					<rich:column style="font-size: 16px !important;">
+						<f:facet name="header">Birthday</f:facet>
+        <h:outputText value="#{user.birthday}">
+        		<f:convertDateTime pattern="dd.MM.yyyy" timeZone="EET"/>
+        </h:outputText> 
+	</rich:column>
+					<rich:column style="font-size: 16px !important;">
+						<f:facet name="header">Permissions</f:facet>
+        #{userBean.returnPermissionsList(user.permissions)}
+	</rich:column>
+					<rich:column style="font-size: 16px !important;">
+						<h:commandButton value="Edit user" action="#{userBean.editUser}" style="font-size: 16px !important;">
+							<f:setPropertyActionListener target="#{userBean.currentStaff}"
+								value="#{user}" />
+						</h:commandButton>
+					</rich:column>
+					<rich:column style="font-size: 16px !important;">
+						<o:commandButton value="Block user" action="#{userBean.blockUser}" rendered="#{userBean.showBlockButton(user)}" style="font-size: 16px !important;">
+							<f:setPropertyActionListener target="#{userBean.currentStaff}"
+								value="#{user}" />
+						</o:commandButton> 
+					</rich:column>
+				</rich:dataTable>
+				
+				<h:commandButton value="Add new user" action="#{userBean.createUser}" style="font-size: 16px !important;">
+						<rich:componentControl target="popup" operation="show" />
+					</h:commandButton>
+				
+				</h:form>
+					
+					
+					
+				<h:form>
+					
+					
+					 
+					 <rich:popupPanel id="popup" modal="true" autosized="true" onmaskclick="#{rich:component('popup')}.hide()">
+					        <f:facet name="header">
+					            <h:outputText value="Please fill in the form" />
+					        </f:facet>
+					        <f:facet name="controls">
+					            <h:outputLink value="#" onclick="#{rich:component('popup')}.hide();">
+					                X
+					            </h:outputLink>
+					        </f:facet>
+		
+		
+			<h:panelGrid columns="2" styleClass="inputForm" style="font-size: 16px !important;">
+				<h:outputText value="Full name: " style="font-size: 16px !important;"/>
+				<h:inputText value="#{userBean.currentStaff.name}" style="font-size: 16px !important;"/>
+				
+				<h:outputText value="Email: " style="font-size: 16px !important;"/>
+				<h:inputText value="#{userBean.currentStaff.email}" style="font-size: 16px !important;">
+					<o:validateEmail summary="Incorrect email"
+						detail="Please provide correct email address" />
+				</h:inputText>
+				
+				<h:outputText value="Password: " style="font-size: 16px !important;"/>
+				<h:inputSecret value="#{userBean.currentStaff.password}" style="font-size: 16px !important;">
+					<o:validateCustom clientFunction="return value.length>5;"
+						detail="Value should contain at least 6 symbols" />
+				</h:inputSecret>
+			
+				<h:outputText value="Address: " style="font-size: 16px !important;"/>
+				<h:inputText value="#{userBean.currentStaff.address}" style="font-size: 16px !important;" />
+			
+				<h:outputText value="Birth Day: " style="font-size: 16px !important;"/>
+				<h:inputText value="#{userBean.birthday}" style="font-size: 16px !important;">
+					<f:convertDateTime pattern="dd.MM.yyyy" /> 
+				</h:inputText>
+				
+				</h:panelGrid>
+				
+				<h:outputText value="Permissions: " style="font-size: 16px !important;"/>
+					<h:selectManyCheckbox value="#{userBean.permissionSelector}" style="font-size: 16px !important;"> 
+						<f:selectItem itemValue="S" itemLabel="Super-user"/>
+						<f:selectItem itemValue="K" itemLabel="Kitchen Staff"/>
+						<f:selectItem itemValue="D" itemLabel="Delivery Staff"/>
+						<f:selectItem itemValue="A" itemLabel="Menu Administrator"/>
+						<f:selectItem itemValue="B" itemLabel="Business Analytic"/>
+					</h:selectManyCheckbox>
+					
+				<a4j:commandButton value="Register" action="#{userBean.registerUser}" render="@all"  onclick="#{rich:component('popup')}.hide();" style="font-size: 16px !important;"/>
+				<a4j:commandButton value="Cancel" onclick="#{rich:component('popup')}.hide();" style="font-size: 16px !important;"/>
+					    </rich:popupPanel>
+				
+				
+			</h:form>
+			
+			<h:form rendered="#{not userBean.showSuper}">
+				<ui:include src="./forbidden.xhtml"/>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</body>
+</html>

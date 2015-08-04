@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:o="http://openfaces.org/"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+<h:head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</h:head>
+<body>
+	<ui:composition>
+		<h1 style="font-family:cursive; text-shadow:gray; text-align:left; text-indent: 40px;">Restaurant "Piccino"</h1>
+		<h:form>		
+		
+		
+			<h:panelGroup style="position:relative; bottom: -62px;">
+				<o:commandLink styleClass="enjoy-css-button" style="color:#c5a956;" value="Menu"
+					action="menu" />
+				<o:commandLink styleClass="enjoy-css-button" style="color:#c5a956;" value="About"
+					action="about" />
+				<o:commandLink styleClass="enjoy-css-button" style="color:#c5a956;" value="Contacts"
+					action="contacts" />
+				<o:commandLink styleClass="enjoy-css-button" style="color:#c5a956;" value="Cart"
+					action="cart" />
+				<o:commandLink styleClass="enjoy-css-button" style="color:#c5a956;"
+					value="Cabinet" action="#{userBean.goToWorkingPage}"
+					rendered="#{userBean.showStaffCabinet}" />
+		
+				<h:panelGrid columns="1" styleClass="cartTotal"> 
+					<h:outputText value="Items in cart: #{cart.cart.size()}" />
+
+					<h:outputText value="Total: #{cart.getTotal()}">
+						<f:convertNumber maxFractionDigits="2" currencySymbol="$"/>
+					</h:outputText>
+					
+				</h:panelGrid>
+			</h:panelGroup>
+					
+					
+			<h:panelGrid columns="2" style="margin-right: 5px; text-align: right;" rendered="#{userBean.showLoginForm}">
+				<h:outputText value="Login:" />
+				<h:inputText id="login" value="#{userBean.login}" promptText="E-mail address" > 
+					<o:validateCustom serverFunction="#{userBean.validateUserLogin}"
+               			detail="No such user in the system"
+               			summary="Validation error"/>
+               			<o:floatingIconMessage for="login" style="border: 2px solid red;" showSummary="true"/>
+				</h:inputText> 
+					
+				
+				<h:outputText value="Password:" />
+				<h:inputSecret id="password" value="#{userBean.password}" promptText="Password"> 
+					<o:validateCustom serverFunction="#{userBean.validatePassword}"
+               			detail="Incorrect password"
+               			summary="validation error"/>
+               			<o:floatingIconMessage for="password" style="border: 2px solid red;" showSummary="true"/>
+				</h:inputSecret>
+								
+			<o:commandLink value="Register" action="register" style="float: left;"/>
+			<o:commandButton value="Login" action="#{userBean.logIn}" style="float: right;"/>
+			</h:panelGrid>
+			
+
+						
+		
+		<h:panelGrid columns="1" style="margin-right: 5px; text-align: right;" rendered="#{userBean.showCustomer}" >
+			<o:commandLink value="Edit My Data" action="editCustomer" styleClass="logout" style="color: black;"/>
+			<o:commandLink value="Logout" action="#{userBean.logOut}" styleClass="logout" style="float:right; color: black;"	/>
+		</h:panelGrid>
+		</h:form>
+
+	</ui:composition>
+</body>
+</html>
+

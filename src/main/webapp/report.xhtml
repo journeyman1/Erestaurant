@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:o="http://openfaces.org/" 
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+
+<h:head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Welcome</title>
+</h:head>
+<body>
+<ui:composition template="WEB-INF/templates/staff.xhtml">
+<ui:define name="content">
+<h:form rendered="#{userBean.showAnalyst}">
+	<o:dateChooser required="true" value="#{reportBean.startDate}" timeZone="EET"/>
+	
+	<o:dateChooser value="#{reportBean.endDate}" timeZone="EET" />
+	
+	<o:commandButton value="Create report" action="#{reportBean.createReport}" style="font-size: 16px !important;">
+		<f:ajax execute="@form" />
+	</o:commandButton>
+</h:form>
+
+<h:form id="report" rendered="#{reportBean.showReport}">
+
+<a4j:region>
+ <rich:dataTable value="#{reportBean.reportData}" var="day" rows="15">
+<rich:column>
+<f:facet name="header">Date</f:facet>
+<h:outputText value="#{day.date}">
+	<f:convertDateTime pattern="dd.MM.yyyy" timeZone="EET"/>
+</h:outputText>
+
+</rich:column>
+
+<rich:column>
+<f:facet name="header">Orders count</f:facet>
+#{day.orderCount}
+</rich:column>
+
+<rich:column>
+<f:facet name="header">Total</f:facet>
+#{day.sums}
+</rich:column>
+            <f:facet name="footer">
+                <rich:dataScroller id="scroller"/>
+            </f:facet>
+</rich:dataTable>
+</a4j:region>
+
+       <rich:chart id="bar" title="Order totals">
+            <rich:chartLegend sorting="ascending"/>
+                	<rich:chartSeries label="Date" type="line">
+                    	<a4j:repeat value="#{reportBean.reportData}" var="day">
+                        	<rich:chartPoint x="#{reportBean.formatDate(day.date)}" y="#{day.sums}" />
+                    	</a4j:repeat>
+                	</rich:chartSeries>
+            <rich:chartXAxis label="Date"/>
+            <rich:chartYAxis label="Total sum of orders per day"/>
+        </rich:chart>
+
+
+</h:form>
+
+			<h:form rendered="#{not userBean.showAnalyst}">
+				<ui:include src="./forbidden.xhtml"/>
+			</h:form>
+</ui:define>
+</ui:composition>
+</body>
+</html>

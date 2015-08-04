@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+xmlns:h="http://java.sun.com/jsf/html"
+xmlns:f="http://java.sun.com/jsf/core"
+xmlns:ui="http://java.sun.com/jsf/facelets"
+xmlns:o="http://openfaces.org/"
+>
+<h:body>
+		<h:form rendered="#{not userBean.showCustomer}">
+	Please fill in the form below: <br/>
+	<h:panelGrid columns="2" styleClass="inputForm" style="text-align: right;">
+	<h:outputText value="Full name: "/>
+	<o:inputText required="true" value="#{userBean.currentCustomer.name}"/>
+
+	<h:outputText value="Address: "/>
+	<o:inputText required="true" value="#{userBean.currentCustomer.address}"/>
+	
+	<h:outputText value="Birth Day: "/>
+	<o:inputText required="true" value="#{userBean.birthday}" promptText="dd.mm.yyyy">
+		<f:convertDateTime pattern="dd.MM.yyyy" timeZone="EET"/> 
+	</o:inputText>
+	</h:panelGrid>
+	<o:commandButton value="Submit order" action="#{userBean.submitOrder}" style="font-size: 16px !important;"/>
+</h:form>
+
+<h:form rendered="#{userBean.showCustomer}">
+	Please confirm your name and address <br/>
+	<h:panelGrid columns="2" styleClass="inputForm" style="text-align: right;">
+	<h:outputText value="Full name: "/>
+	<o:inputText required="true" value="#{userBean.loggedCustomer.name}"/>
+
+	<h:outputText value="Address: "/>
+	<o:inputText required="true" value="#{userBean.loggedCustomer.address}"/>
+
+	</h:panelGrid>
+	<o:commandButton value="Submit order" action="#{userBean.submitOrder}" style="font-size: 16px !important;"/>
+</h:form>
+
+</h:body>
+</html>
